@@ -80,11 +80,11 @@ spark-shell \
 echo 'Finished drawing NAICS-cluster correspondence.'
 
 # Create an intermediate view to avoid reconciling Spark with Hive.
-hive -f hql/view_venture_capital_tmp.hql >> view.out
+hive -f hql/view_vc_tmp.hql >> view.out
 
 # Create the final batch layer view and load into HBase.
 spark-shell --conf spark.hadoop.metastore.catalog.default=hive \
-    < hql/view_venture_capital.scala
+    < hql/view_vc.scala
     >> view.out
 hbase shell hql/init_hbase.txt >> view.out
 hive -f hql/load_hbase.hql >> view.out
