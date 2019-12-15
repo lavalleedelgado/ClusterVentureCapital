@@ -9,7 +9,10 @@
 # Set up ClusterVentureCapital.
 ################################################################################
 
-# # Build the project.
+# On the cluster, navigate to the working directory.
+cd ~/ClusterVentureCapital
+
+# # Build the project from the Maven model.
 # mvn clean -f 'pom.xml'
 # mvn install -f 'pom.xml'
 
@@ -89,10 +92,3 @@ echo 'Finished batch layer view.'
 
 # # Create the speed layer view and load into HBase.
 # echo 'Finished speed layer view.'
-
-################################################################################
-# Start the web server.
-################################################################################
-
-# # Run the application.
-# node web_app.js
