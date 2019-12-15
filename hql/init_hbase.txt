@@ -1,2 +1,3 @@
-create 'pld_venture_capital', 'pld_vc'
+create 'pld_vc', 'vc'
+create 'pld_msa', 'msa'
 exit

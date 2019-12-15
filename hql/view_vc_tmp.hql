@@ -1,5 +1,5 @@
 ADD JAR hdfs:///pld/ClusterVentureCapital-1.0-SNAPSHOT.jar;
-CREATE TABLE IF NOT EXISTS pld_venture_capital_tmp (
+CREATE TABLE IF NOT EXISTS pld_vc_tmp (
     year SMALLINT,
     quarter TINYINT,
     msa_code INTEGER,
@@ -43,7 +43,7 @@ WITH
             ON pld_naics.naics_code = pld_emp.naics_code
         GROUP BY year, quarter, msa_code, cluster_label
     )
-INSERT OVERWRITE TABLE pld_venture_capital_tmp
+INSERT OVERWRITE TABLE pld_vc_tmp
 SELECT
     sec_zip_on_msa.year,
     sec_zip_on_msa.quarter,

@@ -1,8 +1,7 @@
 import org.apache.spark.sql.SaveMode
 
 // Collect extant views.
-val view_by_msa_clutser = spark.table("pld_venture_capital_tmp")
-val msa_labels = spark.table("pld_msa")
+val view_by_msa_clutser = spark.table("pld_vc_tmp")
 
 // Calculate employment and financing by MSA.
 val view_by_msa = view_by_msa_clutser.
@@ -24,12 +23,11 @@ val view_by_msa = view_by_msa_clutser.
     )
 
 // Join the granular and aggregate views with MSA labels.
-val venture_capital = view_by_msa_clutser.
-    join(view_by_msa, Seq("year", "quarter", "msa_code")).
-    join(msa_labels, Seq("msa_code"))
+val vc = view_by_msa_clutser.
+    join(view_by_msa, Seq("year", "quarter", "msa_code"))
 
 // Write the relation to Hive.
-venture_capital.write.mode(SaveMode.Overwrite).saveAsTable("pld_venture_capital")
+vc.write.mode(SaveMode.Overwrite).saveAsTable("pld_vc")
 
 // Close the Spark session.
 System.exit(0)
