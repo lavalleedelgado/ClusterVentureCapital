@@ -24,12 +24,12 @@ app.use(express.static('public'));
 app.get('/lookup.html', function (req, res) {
 
 	// Capture the user input and write to the console.
-    const cvc_id = req.query['year'] + req.query['quarter'] + req.query['msa_code'];
-	console.log(cvc_id);
+    const pld_vc_id = req.query['year'] + req.query['quarter'] + req.query['msa_code'];
+	console.log(pld_vc_id);
 	
 	// Request the data from HBase.
-    const get = new hbase.Get(cvc_id);
-    client.get("pld_cluster_venture_capital", get, function(err, row) {
+    const get = new hbase.Get(pld_vc_id);
+    client.get("pld_venture_capital", get, function(err, row) {
 
 		// Handle any error.
 		assert.ok(!err, "get returned an error: #{err}");
@@ -44,19 +44,19 @@ app.get('/lookup.html', function (req, res) {
 		// Map results to the mustache template.
 		var template = filesystem.readFileSync('result.mustache').toString();
 		var cluster_emp_pct = (
-			row.query['cvc:cluster_emp'].value / row.query['cvc:msa_emp'].value
+			row.query['pld_vc:cluster_emp'].value / row.query['pld_vc:msa_emp'].value
 		)
 		var cluster_amt_pct = (
-			row.query['cvc:cluster_amt'].value / row.query['cvc:msa_amt'].value
+			row.query['pld_vc:cluster_amt'].value / row.query['pld_vc:msa_amt'].value
 		)
 		var view = {
-			'msa_label': row.cols['cvc:msa_label'].value,
+			'msa_label': row.cols['pld_vc:msa_label'].value,
 			'clusters': [
 				{
-					'cluster_label': row.cols['cvc:cluster_label'].value,
-					'cluster_emp': row.query['cvc:cluster_emp'].value,
+					'cluster_label': row.cols['pld_vc:cluster_label'].value,
+					'cluster_emp': row.query['pld_vc:cluster_emp'].value,
 					'cluster_emp_pct': (cluster_emp_pct * 100).toFixed(),
-					'cluster_amt': req.query['cvc:cluster_amt'].value,
+					'cluster_amt': req.query['pld_vc:cluster_amt'].value,
 					'cluster_amt_pct': (cluster_amt_pct * 100).toFixed()
 				}
 			]

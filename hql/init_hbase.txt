@@ -1,2 +1,2 @@
-create 'pld_cluster_venture_capital', 'cvc'
+create 'pld_venture_capital', 'pld_vc'
 exit

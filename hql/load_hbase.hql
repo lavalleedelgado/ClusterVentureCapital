@@ -1,4 +1,4 @@
-CREATE TABLE pld_cluster_venture_capital_hbase (
+CREATE TABLE pld_venture_capital_hbase (
     hbase_id INTEGER,
     msa_label STRING,
     cluster_label STRING
@@ -9,9 +9,9 @@ CREATE TABLE pld_cluster_venture_capital_hbase (
 )
 STORED BY 'org.apache.hadoop.hive.hbase.HBaseStorageHandler'
 WITH SERDEPROPERTIES (
-    'hbase.columns.mapping' = ':key,cvc:msa_label,cvc:cluster_label,cvc:cluster_emp,cvc:msa_emp,cvc:cluster_amt,cvc:msa_amt'
+    'hbase.columns.mapping' = ':key,pld_vc:msa_label,pld_vc:cluster_label,pld_vc:cluster_emp,pld_vc:msa_emp,pld_vc:cluster_amt,pld_vc:msa_amt'
 )
-TBLPROPERTIES ('hbase.table.name' = 'pld_cluster_venture_capital');
+TBLPROPERTIES ('hbase.table.name' = 'pld_venture_capital');
 INSERT OVERWRITE TABLE pld_cluster_venture_capital_hbase
 SELECT
     CAST(year || quarter || msa_code AS INTEGER),
