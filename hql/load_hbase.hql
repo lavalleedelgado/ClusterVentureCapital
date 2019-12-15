@@ -12,7 +12,7 @@ WITH SERDEPROPERTIES (
     'hbase.columns.mapping' = ':key,pld_vc:msa_label,pld_vc:cluster_label,pld_vc:cluster_emp,pld_vc:msa_emp,pld_vc:cluster_amt,pld_vc:msa_amt'
 )
 TBLPROPERTIES ('hbase.table.name' = 'pld_venture_capital');
-INSERT OVERWRITE TABLE pld_cluster_venture_capital_hbase
+INSERT OVERWRITE TABLE pld_venture_capital_hbase
 SELECT
     CAST(year || quarter || msa_code AS INTEGER),
     msa_label,
