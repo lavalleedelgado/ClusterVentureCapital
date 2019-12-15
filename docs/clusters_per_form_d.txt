@@ -1,0 +1,35 @@
+1	Agriculture
+2	Commercial Banking
+3	Insurance
+4	Investing
+5	Investment Banking
+6	Pooled Investment Fund
+7	Other Banking and Financial Services
+8	Business Services
+9	Electric Utilities
+10	Energy Conservation 
+11	Coal Mining
+12	Environmental Services
+13	Oil and Gas
+14	Other Energy 
+15	Biotechnology
+16	Health Insurance
+17	Hospitals and Physicians
+18	Pharmaceuticals
+19	Other Health Care
+20	Manufacturing
+21	Commercial
+22	Construction
+23	REITS and Finance
+24	Residential
+25	Other Real Estate
+26	Retailing
+27	Restaurants
+28	Computers
+29	Telecommunications
+30	Other Technology
+31	Airlines and Airports
+32	Lodging and Conventions
+33	Tourism and Travel Services
+34	Other Travel
+35	Other

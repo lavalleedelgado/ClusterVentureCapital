@@ -1,0 +1,24 @@
+Column Name	Maximum Length	Column Description
+ZCTA5	5	2010 ZIP Code Tabulation Area
+CBSA	5	Metropolitan or Micropolitan Statistical Area FIPS Code
+MEMI	1	Metropolitan/Micropolitan Statistical Status Indicator
+POPPT	14	Calculated 2010 Population for the relationship record
+HUPT	14	Calculated 2010 Housing Unit Count for the relationship record
+AREAPT	14	Total Area for the record
+AREALANDPT	14	Land Area for the record
+ZPOP	14	2010 Population of the 2010 ZCTA
+ZHU10	14	2010 Housing Unit Count of the 2010 ZCTA
+ZAREA	14	Total Area of the 2010 ZCTA
+ZAREALAND	14	Total Land Area of the 2010 ZCTA
+MPOP	14	2010 Population of the  Metropolitan or Micropolitan Statistical Area
+MHU	14	2010 Housing Unit Count of the Metropolitan or Micropolitan Statistical Area
+MAREA	14	Total Area of the Metropolitan or Micropolitan Statistical Area
+MAREALAND	14	Total Land Area of the Metropolitan or Micropolitan Statistical Area
+ZPOPPCT	5	The Percentage of Total Population of the 2010 ZCTA represented by the record
+ZHUPCT	5	The Percentage of Total Housing Unit Count of the 2010 ZCTA represented by the record
+ZAREAPCT	5	The Percentage of Total Area of the 2010 ZCTA represented by the record
+ZAREALANDPCT	5	The Percentage of Total Land Area of the 2010 ZCTA represented by the record
+MPOPPCT	5	The Percentage of Total Population of the Metropolitan or Micropolitan Statistical Area represented by the record
+MHUPCT	5	The Percentage of Total Housing Unit Count of the Metropolitan or Micropolitan Statistical Area represented by the record
+MAREAPCT	5	The Percentage of Total Area of the Metropolitan or Micropolitan Statistical Area represented by the record
+MAREALANDPCT	5	The Percentage of Total Land Area of the Metropolitan or Micropolitan Statistical Area represented by the record

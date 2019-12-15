@@ -1,0 +1,28 @@
+<!DOCTYPE html PUBLIC "-//IETF//DTD HTML 2.0//EN">
+<html>
+  <head>
+    <title>Result</title>
+    <link type="text/css" rel="stylesheet" href="table.css" />
+  </head>
+  <body>
+    <div>Venture capital in {{msa_label}} by industry cluster</div>
+    <table>
+      <tr>
+        <td>Cluster</td>
+        <td>Cluster employment</td>
+        <td>% of employment in MSA</td>
+        <td>Cluster venture capital</td>
+        <td>% of financing in MSA</td>
+      </tr>
+      {{#clusters}}
+      <tr>
+        <td>{{cluster_label}}</td>
+        <td>{{cluster_emp}}</td>
+        <td>{{cluster_emp_pct}}</td>
+        <td>{{cluster_amt}}</td>
+        <td>{{cluster_amt_pct}}</td>
+      </tr>
+      {{/clusters}}
+    </table>
+  </body>
+</html>
