@@ -1,7 +1,7 @@
 CREATE TABLE pld_venture_capital_hbase (
     hbase_id INTEGER,
     msa_label STRING,
-    cluster_label STRING
+    cluster_label STRING,
     cluster_emp INTEGER,
     msa_emp DOUBLE,
     cluster_amt DOUBLE,
