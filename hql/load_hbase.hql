@@ -21,4 +21,4 @@ SELECT
     msa_emp,
     cluster_amt,
     msa_amt
-FROM pld_cluster_venture_capital;
+FROM pld_venture_capital;
