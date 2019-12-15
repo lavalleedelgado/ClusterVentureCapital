@@ -124,24 +124,24 @@ spark-shell \
 
 Lastly, we use Scala and HQL to join these tables into the view our application serves in response to a query. We aggregate the SEC data from months to quarters and from ZIP codes to MSA codes, and then join the result with the BLS and NAICS data. We also aggregate that same view to the MSA level to calculate the share of employment and financing that a cluster represents for the MSA. The unique identifier for HBase is the concatenation of the year, quarter, and MSA code fields.
 
-| `pld_cluster_venture_capital` | type     |
-| ----------------------------- | -------- |
-| year                          | SMALLINT |
-| quarter                       | STRING   |
-| msa_code                      | INTEGER  |
-| cluster_label                 | STRING   |
-| cluster_emp                   | INTEGER  |
-| cluster_emp_pct               | FLOAT    |
-| cluster_amt                   | INTEGER  |
-| cluster_amt_pct               | FLOAT    |
+| `pld_venture_capital` | type     |
+| --------------------- | -------- |
+| year                  | SMALLINT |
+| quarter               | STRING   |
+| msa_code              | INTEGER  |
+| cluster_label         | STRING   |
+| cluster_emp           | INTEGER  |
+| msa_emp               | FLOAT    |
+| cluster_amt           | INTEGER  |
+| msa_amt               | FLOAT    |
 
 ```
 # Create an intermediate view to avoid reconciling Spark with Hive.
-hive -f hql/view_cluster_venture_capital_a.hql >> view.out
+hive -f hql/view_venture_capital_tmp.hql >> view.out
 
 # Create the final batch layer view and load into HBase.
 spark-shell --conf spark.hadoop.metastore.catalog.default=hive \
-    < hql/view_cluster_venture_capital_b.scala
+    < hql/view_venture_capital.scala
     >> view.out
 hbase shell hql/init_hbase.txt >> view.out
 hive -f hql/load_hbase.hql >> view.out

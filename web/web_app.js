@@ -38,6 +38,9 @@ app.get('/lookup.html', function (req, res) {
 			return;
 		}
 
+		// Print response to the console.
+		console.log(row);
+
 		// Map results to the mustache template.
 		var template = filesystem.readFileSync('result.mustache').toString();
 		var cluster_emp_pct = (
