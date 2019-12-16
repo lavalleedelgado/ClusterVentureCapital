@@ -2,32 +2,52 @@
 <html>
   <head>
     <title>Cluster Venture Capital</title>
+    <style>
+      div.main {
+        margin: auto;
+        width: 75%;
+        background-color: #CCCCCC;
+      }
+      h1 {
+        text-align: center;
+      }
+      iframe {
+        display: block;
+        margin: auto;
+        width: 100%;
+        height: 100%;
+      }
+    </style>
   </head>
   <body>
-    <h1>Cluster Venture Capital</h1>
-    <p>Patrick Lavallee Delgado<br />Department of Computer Science<br />University of Chicago<br />December 2019</p>
-    <h3>Predicting high-growth sectors</h3>
-    <p>Financial investments in start-ups and emerging firms offer compelling indicators of the economic development in an industry or region, particularly with respect to advances in knowledge and technology.</p>
-    <p>Since small companies have fewer reporting obligations to the US Securities and Exchange Commission, we often have little evidence beyond anecdote with which to identify sectors on the brink of growth.</p>
-    <p>Still, even small companies must disclose the stocks, bonds, and other financial instruments they sell investors to raise capital. We can approximate venture capital activity from the receipts of these "exempt offerings".</p>
-    <p>This application offers preliminary understanding the geographic and industrial distribution of venture capital from SEC data with contextual support from US Bureau of Labor Statistics and US Census Bureau data.</p>
-    <h3>Query the data</h3>
-    <p>Give a year, quarter, and metropolitan statistical area to see venture capital financing by industry cluster. <a href='https://api.census.gov/data/2010/acs/acs1/profile?get=NAME&for=metropolitan%20statistical%20area/micropolitan%20statistical%20area:*'>Follow this link to a correspondence of MSA codes to names</a>.</p>
-    <form action='/lookup.html' method='get' target='results_iframe'>
-      <table>
-        <tr>
-          <td>Year</td>
-          <td>Quarter</td>
-          <td>MSA Code</td>
-        </tr>
-        <tr>
-          <td><input name='year' type='number' min='2010' max='2020' /></td>
-          <td><input name='quarter' type='number' min='1' max='4' /></td>
-          <td><input type='text' name='msa_code' maxlength='5' value='16980' /></td>
-        </tr>
-      </table>
-      <input  type='submit' value='Submit'>
-    </form>
-    <iframe name='results_iframe' frameBorder='0' style='display:block; width:70%;' />
+    <div class='main'>
+      <h1>Cluster Venture Capital</h1>
+      <span style='text-align:center;'><p>Patrick Lavallee Delgado<br />Department of Computer Science<br />University of Chicago<br />December 2019</p></span>
+      <h3>Predicting high-growth sectors</h3>
+      <p>Financial investments in start-ups and emerging firms offer compelling indicators of the economic development in an industry or region, particularly with respect to advances in knowledge and technology.</p>
+      <p>Since small companies have fewer reporting obligations to the US Securities and Exchange Commission, we often have little evidence beyond anecdote with which to identify sectors on the brink of growth.</p>
+      <p>Still, even small companies must disclose the stocks, bonds, and other financial instruments they sell investors to raise capital. We can approximate venture capital activity from the receipts of these "exempt offerings".</p>
+      <p>This application offers preliminary understanding the geographic and industrial distribution of venture capital from SEC data with contextual support from US Bureau of Labor Statistics and US Census Bureau data.</p>
+      <h3>Query the data</h3>
+      <p>Give a year, quarter, and metropolitan statistical area to see venture capital financing by industry cluster. <a href='https://api.census.gov/data/2010/acs/acs1/profile?get=NAME&for=metropolitan%20statistical%20area/micropolitan%20statistical%20area:*'>Follow this link to a correspondence of MSA codes to names</a>.</p>
+      <form action='/lookup.html' method='get' target='results_iframe'>
+        <table>
+          <tr>
+            <td>Year</td>
+            <td><input name='year' type='number' min='2010' max='2020' /></td>
+          </tr>
+          <tr>
+            <td>Quarter</td>
+            <td><input name='quarter' type='number' min='1' max='4' /></td>
+          </tr>
+          <tr>
+            <td>MSA Code</td>
+            <td><input type='text' name='msa_code' maxlength='5' value='16980' /></td>
+          </tr>
+        </table>
+        <input  type='submit' value='Submit'>
+      </form>
+      <iframe name='results_iframe' frameBorder='0' />
+    </div>
   </body>
 </html>
