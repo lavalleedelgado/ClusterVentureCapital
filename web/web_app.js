@@ -100,7 +100,7 @@ app.get('/lookup.html', function (req, res) {
 			
 			// Collect the results.
 			var clusters_emp_amt = []
-			for (cluster in CLUSTERS) {
+			for (var cluster of CLUSTERS) {
 				clusters_emp_amt.push(
 					{
 						cluster_label: cluster,
