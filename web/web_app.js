@@ -103,11 +103,11 @@ app.get('/lookup.html', function (req, res) {
 			for (var cluster of CLUSTERS) {
 				clusters_emp_amt.push(
 					{
-						cluster_label: cluster,
+						cluster_label: cluster.charAt(0).toUpperCase + cluster.substring(1).replace('_', ' '),
 						cluster_emp: vc_response.cols['vc:' + cluster + '_emp'].value,
-						cluster_emp_pct: cluster_pct(cluster, 'emp'),
+						cluster_emp_pct: cluster_pct(cluster, 'emp') + '%',
 						cluster_amt: vc_response.cols['vc:' + cluster + '_amt'].value,
-						cluster_amt_pct: cluster_pct(cluster, 'amt')
+						cluster_amt_pct: cluster_pct(cluster, 'amt') + '%'
 					}
 				)
 			}
