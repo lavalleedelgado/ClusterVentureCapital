@@ -5,7 +5,7 @@ import org.apache.spark.sql.SaveMode
 val naics = spark.table("pld_naics_csv")
 
 // Assign cluster labels.
-val naics_clusters = naics._
+val naics_clusters = naics.
     withColumn("cluster_label",
         when(substring(naics("naics_code"), 1, 2) === "11", "Agriculture").
         when(substring(naics("naics_code"), 1, 3) === "211", "Oil and Gas").
