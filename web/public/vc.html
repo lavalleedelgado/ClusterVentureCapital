@@ -16,7 +16,7 @@
       <h2>Query the data</h2>
       <p>Give a year, quarter, and metropolitan statistical area to see venture capital financing by industry cluster. <a href='https://api.census.gov/data/2010/acs/acs1/profile?get=NAME&for=metropolitan%20statistical%20area/micropolitan%20statistical%20area:*'>Follow this link to a correspondence of MSA codes to names</a>.</p>
       <form action='/lookup.html' method='get' target='results_iframe'>
-        <table>
+        <table style='width: 40%'>
           <tr>
             <td>Year</td>
             <td><input name='year' type='number' min='2010' max='2020' /></td>
@@ -29,8 +29,10 @@
             <td>MSA Code</td>
             <td><input type='text' name='msa_code' maxlength='5' value='16980' /></td>
           </tr>
+          <tr>
+            <input  type='submit' value='Submit'>
+          </tr>
         </table>
-        <input  type='submit' value='Submit'>
       </form>
       <iframe name='results_iframe' frameBorder='0' />
     </div>

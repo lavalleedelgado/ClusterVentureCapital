@@ -5,18 +5,18 @@
     <link type='text/css' rel='stylesheet' href='austere.css' />
   </head>
   <body>
-    <h3>Venture capital in {{msa_label}} by industry cluster</h3>
+    <h3>{{msa_label}}</h3>
     <table>
       <tr>
-        <th>Cluster</th>
-        <th>Employment</th>
+        <th>SEC cluster</th>
+        <th>Employment (thousands)</th>
         <th></th>
-        <th>Venture capital</th>
+        <th>Venture capital (thousands)</th>
         <th></th>
       </tr>
       {{#clusters}}
       <tr>
-        <td>{{cluster_label}}</td>
+        <td style='text-align: left;'>{{cluster_label}}</td>
         <td>{{cluster_emp}}</td>
         <td>{{cluster_emp_pct}}</td>
         <td>{{cluster_amt}}</td>

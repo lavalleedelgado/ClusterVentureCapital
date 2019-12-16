@@ -2,7 +2,7 @@
     font-family: Garamond, Times, serif;
 }
 h1 {
-    font-size: 1.4em;
+    font-size: 1.6em;
     font-weight: normal;
 }
 h2 {
@@ -34,7 +34,7 @@ th {
     height: 2em;
     padding: 10px;
     border-bottom: 1px solid #DDDDDD;
-    text-align: center;
+    text-align: left;
     font-size: 1em;
     font-weight: bold;
 }

@@ -104,9 +104,9 @@ app.get('/lookup.html', function (req, res) {
 				clusters_emp_amt.push(
 					{
 						cluster_label: cluster.charAt(0).toUpperCase() + cluster.substring(1).replace('/_/g', ' '),
-						cluster_emp: vc_response.cols['vc:' + cluster + '_emp'].value,
+						cluster_emp: (vc_response.cols['vc:' + cluster + '_emp'].value / 1000).toFixed(),
 						cluster_emp_pct: cluster_pct(cluster, 'emp') + '%',
-						cluster_amt: vc_response.cols['vc:' + cluster + '_amt'].value,
+						cluster_amt: (vc_response.cols['vc:' + cluster + '_amt'].value / 1000).toFixed(),
 						cluster_amt_pct: cluster_pct(cluster, 'amt') + '%'
 					}
 				)
