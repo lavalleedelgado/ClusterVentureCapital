@@ -2,7 +2,7 @@
     font-family: Garamond, Times, serif;
 }
 h1 {
-    font-size: 1.6em;
+    font-size: 1.8em;
     font-weight: normal;
 }
 h2 {
@@ -19,7 +19,7 @@ p {
 }
 div {
     margin: auto;
-    width: 60%;
+    width: 50%;
     padding: 40px;
     background-color: #EFEFEF;
 }

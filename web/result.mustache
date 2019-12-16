@@ -9,17 +9,17 @@
     <table>
       <tr>
         <th>SEC cluster</th>
-        <th colspan='2'>Employment (thousands)</th>
+        <th colspan='2' style='border-left: 1px solid black; border-right: 1px solid black;'>Employment (thousands)</th>
         <th colspan='3'>Venture capital (thousands)</th>
       </tr>
       {{#clusters}}
       <tr>
         <td style='text-align: left;'>{{cluster_label}}</td>
-        <td style='padding-right: 2px'>{{cluster_emp}}</td>
-        <td style='padding-left: 2px'>{{cluster_emp_pct}}</td>
-        <td style='padding-right: 0px'>$</td>
-        <td style='padding-right: 2px'>{{cluster_amt}}</td>
-        <td style='padding-left: 2px'>{{cluster_amt_pct}}</td>
+        <td style='padding-right: 2px; border-left: 1px solid black;'>{{cluster_emp}}</td>
+        <td style='padding-left: 2px; border-right: 1px solid black;'>{{cluster_emp_pct}}</td>
+        <td style='padding-right: 0px;'>$</td>
+        <td style='padding-right: 2px;'>{{cluster_amt}}</td>
+        <td style='padding-left: 2px;'>{{cluster_amt_pct}}</td>
       </tr>
       {{/clusters}}
     </table>
