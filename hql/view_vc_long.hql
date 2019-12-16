@@ -51,8 +51,8 @@ SELECT
     sec_zip_on_msa.cluster_label,
     bls_naics_on_cluster.cluster_emp,
     sec_zip_on_msa.cluster_amt
-FROM sec_zip_on_msa
-JOIN bls_naics_on_cluster
+FROM bls_naics_on_cluster
+LEFT JOIN sec_zip_on_msa
     ON bls_naics_on_cluster.year = sec_zip_on_msa.year
     AND bls_naics_on_cluster.quarter = sec_zip_on_msa.quarter
     AND bls_naics_on_cluster.msa_code = sec_zip_on_msa.msa_code
