@@ -56,7 +56,8 @@ app.get('/lookup.html', function (req, res) {
 
 	// Rearrange the parameters to identify HBase keys.
 	const msa_id = (year - Math.floor(year / 10)).toString() + msa_code
-    const vc_id = year + quarter + msa_code;
+	const vc_id = year + quarter + msa_code;
+	console.log(msa_id)
 	
 	// Request the MSA label.
 	const get_msa_id = new hbase.Get(msa_id);
