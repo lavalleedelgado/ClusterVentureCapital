@@ -55,8 +55,8 @@ app.get('/lookup.html', function (req, res) {
 	console.log('MSA: ' + msa_code + ', PERIOD: ' + year + quarter);
 
 	// Rearrange the parameters to identify HBase keys.
-	const msa_id = (year - Math.floor(year / 10)).toString() + msa_code
-	const vc_id = year + quarter + msa_code;
+	const msa_id = (year - Math.floor(year / 10)) + '' + msa_code
+	const vc_id = year + '' + quarter + '' + msa_code;
 	console.log(msa_id)
 	
 	// Request the MSA label.
