@@ -1,27 +1,27 @@
 # Venture Capital Finance Mapper
 
-Patrick Lavallee Delgado \\
-Department of Computer Science \\
-University of Chicago \\
+Patrick Lavallee Delgado \
+Department of Computer Science \
+University of Chicago \
 December 2019
 
-Financial investments in start-ups and emerging firms offer compelling indicators of the economic development in an industry or region, particularly with respect to advances in knowledge and technology. Since small companies have fewer reporting obligations to the US Securities and Exchange Commission, one often has little evidence beyond anecdote with which to identify sectors on the brink of growth.
+Financial investments in start-ups and emerging firms offer compelling indicators of the economic development in an industry or region, particularly with respect to advances in knowledge and technology. But since most start-ups have fewer reporting obligations to the US Securities and Exchange Commission, one often has little evidence beyond anecdote with which to identify sectors on the brink of growth.
 
 Still, even small companies must disclose the stocks, bonds, and other financial instruments they sell investors to raise capital. One can approximate venture capital activity from the receipts of these "exempt offerings". Companies report these on SEC form D, filings for which are publically available the next business day. Of course, this premise assumes widespread compliance, [which some argue is weak](https://techcrunch.com/2018/11/07/the-disappearing-form-d/).
 
-This application offers preliminary understanding the geographic and industrial distribution of venture capital from SEC data with contextual support from US Bureau of Labor Statistics and US Census Bureau data. Existing services either require expensive subscriptions or are static visualizations.
+This application offers preliminary understanding the geographic and industrial distribution of venture capital from SEC data with contextual support from data available with the US Bureau of Labor Statistics and US Census Bureau. Existing services that accomplish the same either require expensive subscriptions or are static visualizations.
 
 The scripts `setup.sh` and `run.sh` replicate the work I describe below.
 
 ## Data
 
-### US Security and Exchance Commission, EDGAR system
+### US Security and Exchance Commission, [EDGAR system](https://www.sec.gov/edgar/searchedgar/accessing-edgar-data.htm)
 
-The daily index lists all filings received in the previous business day by form type and with links to XML file representations of each. I look to the form D template to identify the relevant tags in the document. It seems that all EDGAR files start with an unended XML tag, which confuses the document intepreter. I remove this line upon download.
+The daily index lists all filings received in the previous business day by form type and with links to XML file representations of each. I look to the form D template to identify the relevant tags in the document. It seems that all EDGAR files start with an unended XML tag, which confuses the document intepreter so I remove it upon download. I also add a `census_year` field to match postal codes to the appropriate aggregated geography, a correspondence which can change across administrations of the decennial census.
 
 | `pld_form_d`  | type     |
 | ------------- | -------- |
-| cik           | INTGER   |
+| cik           | INTEGER  |
 | entity        | STRING   |
 | census_year   | SMALLINT |
 | year          | SMALLINT |
@@ -31,7 +31,7 @@ The daily index lists all filings received in the previous business day by form 
 | cluster_label | STRING   |
 | amount        | FLOAT    |
 
-My implementation uses a Java appliation to read each XML file, serializes the data into HDFS, and loads into Hive with the Thrift deserializer.
+My implementation uses a Java appliation to read each XML file, serializes the data into HDFS, and loads it all into Hive with the Thrift deserializer.
 
 ```
 touch sec.out
@@ -48,9 +48,9 @@ hdfs dfs -put $JAR /pld
 hive -f hql/load_form_d_data.hql >> sec.out
 ```
 
-### US Bureau of Labor Statistics, QCEW survey
+### US Bureau of Labor Statistics, [QCEW survey](https://www.bls.gov/cew/downloadable-data-files.htm)
 
-The quarterly survey collects county employment and wage data by industry. The data also offer aggregation at the metropolitan statistical area (MSA) level, which more naturally describes the lived economic climate. Each publication of the QCEW is a ZIP directory of CSV files for each geopgrahy. I only keep those that correspond to a MSA and cut the header row.
+The quarterly survey collects employment and wage data by county and industry. The data also offer aggregation at the metropolitan statistical area (MSA) level, which more naturally describes the lived economic climate. Importantly, this data is not available at the postal code level, which is the geographic unit the SEC reports. Each publication of the QCEW is a ZIP directory of CSV files for each geopgrahy. I only keep those that correspond to a MSA and cut the header row.
 
 | `pld_emp`  | type     |
 | ---------- | -------- |
@@ -72,9 +72,9 @@ sh utils/get_bls_data.sh >> bls.out
 hive -f hql/load_qcew_data.hql >> bls.out
 ```
 
-### US Census Bureau
+### US Census Bureau, [ACS 1-year estimate](https://www.census.gov/data/developers/data-sets/acs-1year.html)
 
-The geographic correspondence data allow me to compare the data I collect from the SEC at the ZIP code level to that I collect from the BLS at the MSA level. The MSA and industry code (NAICS) labels make the data easier to read. These are static data: the census updates geographic correspondence every ten years, and industry definitions in response just as infrequently.
+The geographic correspondence data allow me to compare the data I collect from the SEC at the postal code level to the data I collect from the BLS at the MSA level. The MSA and industry code (NAICS) labels make the data easier to read. These data are essentially static: the census updates geographic correspondence every ten years, and industry definitions in response just as infrequently.
 
 | `pld_msa`   | type     |
 | ----------- | -------- |
@@ -82,7 +82,7 @@ The geographic correspondence data allow me to compare the data I collect from t
 | msa_code    | INTEGER  |
 | msa_label   | STRING   |
 
-My implementation reinterprets the original comma-delimited files as tab-delimited files for easy reference from the command line. it puts the TSV files into HDFS and loads the data into Hive with the CSV deserializer using the tab delimiter. 
+My implementation reinterprets the original comma-delimited files as tab-delimited files for easy reference from the command line. It puts the TSV files into HDFS and loads the data into Hive with the CSV deserializer using the tab delimiter. 
 
 ```
 touch acs.out
@@ -100,7 +100,7 @@ hive -f hql/load_naics_data.hql >> acs.out
 
 ### Industry clusters
 
-The economic development and policy literature offers no consensus on the definition of a "cluster". The US Cluster Mapping Project at Harvard Business School clusters NAICS codes by their geographic specialization and comanifestation. Future efforts will replicate those clusters, but in the meantime, I follow a rather rudimentary approach based on semantic proximity.
+The economic development and policy literature offers no consensus on the definition of a "cluster". The [US Cluster Mapping Project](https://clustermapping.us/content/cluster-mapping-methodology) at Harvard Business School clusters NAICS codes by their geographic specialization and comanifestation. Future efforts will replicate those clusters, but in the meantime, I pursue a rather rudimentary approach based on semantic proximity.
 
 | `pld_naics`   | type   |
 | ------------- | ------ |
@@ -122,9 +122,9 @@ spark-shell \
 
 ### Batch view
 
-Lastly, I use Scala and HQL to join these tables into the view our application serves in response to a query. I aggregate the SEC data from months to quarters and from ZIP codes to MSA codes, and then join the result with the BLS and NAICS data. I also aggregate that same view to the MSA level to calculate the share of employment and financing that a cluster represents for the MSA. The unique identifier for HBase is the concatenation of the year, quarter, and MSA code fields.
+Lastly, I use Scala and HQL to join these tables into the view our application serves in response to a query. I aggregate the SEC data from months to quarters and from postal codes to MSA codes, and then join the result with the BLS and NAICS data. I also aggregate that same view to the MSA level to calculate the share of employment and financing that a cluster represents for the MSA. The unique identifier for HBase is the concatenation of the year, quarter, and MSA code fields.
 
-| `pld_venture_capital` | type     |
+| `pld_vc_long        ` | type     |
 | --------------------- | -------- |
 | year                  | SMALLINT |
 | quarter               | STRING   |
@@ -135,14 +135,18 @@ Lastly, I use Scala and HQL to join these tables into the view our application s
 | cluster_amt           | INTEGER  |
 | msa_amt               | FLOAT    |
 
+My implementation first creates the view in longform and then rearranges it in wideform. Therefore, one record in HBase has employment and financing data for each cluster in the MSA, as well as for the MSA as a whole.
+
 ```
-# Create an intermediate view to avoid reconciling Spark with Hive.
-hive -f hql/view_venture_capital_tmp.hql >> view.out
+# Create the view in longform to avoid reconciling Spark with Hive.
+hive -f hql/view_vc_long.hql >> view.out
+
+# Create the view in wideform with columns for each cluster.
+spark-shell --conf spark.hadoop.metastore.catalog.default=hive \
+    < hql/view_vc_wide.scala
+    >> view.out
 
 # Create the final batch layer view and load into HBase.
-spark-shell --conf spark.hadoop.metastore.catalog.default=hive \
-    < hql/view_venture_capital.scala
-    >> view.out
 hbase shell hql/init_hbase.txt >> view.out
 hive -f hql/load_hbase.hql >> view.out
 ```
@@ -170,8 +174,6 @@ npm install hbase-rpc-client
 node web_app.js
 ```
 
-The webserver is on `34.66.189.234` and the applicaton lists on port `3886`. So, navigating to `http://34.66.189.234:3886/cvc.html` reaches the web app.
-
-
+The webserver is on `34.66.189.234` and the applicaton lists on port `3886`. So, navigating to `http://34.66.189.234:3886/vc.html` reaches the web app.
 
 Thanks for reading!

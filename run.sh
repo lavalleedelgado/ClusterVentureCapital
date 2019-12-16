@@ -20,3 +20,4 @@ npm install hbase-rpc-client
 # Run the application.
 node web_app.js
 
+# Navigate to http://34.66.189.234:3886/vc.html
