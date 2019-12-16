@@ -9,6 +9,11 @@ h2 {
     font-size: 1em;
     font-weight: bold;
 }
+h3 {
+    font-size: 1em;
+    font-weight: bold;
+    text-align: center;
+}
 p {
     font-size: 0.8em
 }
@@ -35,11 +40,12 @@ th {
     padding: 10px;
     border-bottom: 1px solid #DDDDDD;
     text-align: left;
-    font-size: 1em;
+    font-size: 0.8em;
     font-weight: bold;
 }
 td {
     padding: 10px;
     border-bottom: 1px solid #DDDDDD;
     text-align: right;
+    font-size: 0.6em;
 }
