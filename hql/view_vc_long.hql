@@ -45,10 +45,10 @@ WITH
     )
 INSERT OVERWRITE TABLE pld_vc_long
 SELECT
-    sec_zip_on_msa.year,
-    sec_zip_on_msa.quarter,
-    sec_zip_on_msa.msa_code,
-    sec_zip_on_msa.cluster_label,
+    bls_naics_on_cluster.year,
+    bls_naics_on_cluster.quarter,
+    bls_naics_on_cluster.msa_code,
+    bls_naics_on_cluster.cluster_label,
     bls_naics_on_cluster.cluster_emp,
     sec_zip_on_msa.cluster_amt
 FROM bls_naics_on_cluster
