@@ -1,91 +1,126 @@
 'use strict';
-const http = require('http');
+
+// Identify cluster labels in the data.
+var CLUSTERS = [
+	'agriculture', 
+	'airlines_and_airports', 
+	'business_services',
+	'coal_mining',
+	'computers',
+	'construction', 
+	'electric_utilities',
+	'lodging_and_conventions', 
+	'manufacturing',
+	'oil_and_gas',
+	'other_banking_and_financial_services',
+	'other_energy',
+	'other_health_care',
+	'other_real_estate',
+	'other',
+	'restaurants',
+	'retailing', 
+	'telecommunications', 
+	'tourism_and_travel_services'
+]
+
+// Collect requirements.
 var assert = require('assert');
-const express = require('express');
-const app = express();
-const mustache = require('mustache');
 const filesystem = require('fs');
+const http = require('http');
 const url = require('url');
+const express = require('express');
+const mustache = require('mustache');
 const hbase = require('hbase-rpc-client');
+
+// Specify connections and the HBase client.
 const hostname = '127.0.0.1';
 const port = 3886;
-
 var client = hbase({
-    zookeeperHosts: ['mpcs53014c10-m-6-20191016152730.us-central1-a.c.mpcs53014-2019.internal:2181'],
+	zookeeperHosts: ['mpcs53014c10-m-6-20191016152730.us-central1-a.c.mpcs53014-2019.internal:2181'],
     zookeeperRoot: '/hbase-unsecure'
 });
-
 client.on('error', function(err) {
-  console.log(err)
+	console.log(err)
 })
 
 // Answer the query for venture capital by cluster for an MSA.
+const app = express();
 app.use(express.static('public'));
 app.get('/lookup.html', function (req, res) {
 
-	// Capture the user input and write it to the console.
-	const census_year = req.query['year'] - Math.floor(req.query['year'] / 10)
-	const msa_id = census_year + req.query['msa_code']
-    const vc_id = req.query['year'] + req.query['quarter'] + req.query['msa_code'];
-	console.log(vc_id);
+	// Capture and write the user input to the console.
+	const year = req.query['year']
+	const quarter = req.query['quarter']
+	const msa_code = req.query['msa_code']
+	console.log('MSA: ' + msa_code + ', PERIOD: ' + year + quarter);
+
+	// Rearrange the parameters to identify HBase keys.
+	const msa_id = (year - Math.floor(year / 10)).toString() + msa_code
+    const vc_id = year + quarter + msa_code;
 	
 	// Request the MSA label.
 	const get_msa_id = new hbase.Get(msa_id);
-	client.get("pld_msa", get_msa_id, function(msa_err, msa_response) {
+	client.get('pld_msa_hbase', get_msa_id, function(msa_err, msa_response) {
 
 		// Handle any error.
-		assert.ok(!msa_err, "get returned an error: #{err}");
-		if(!msa_response){
-			res.send("<html><body>The requested MSA does not exist in the data.</body></html>");
+		assert.ok(!msa_err, 'get returned an error: #{err}');
+		if (!msa_response) {
+			res.send('<html><body>The requested MSA does not exist in the data.</body></html>');
 			return;
 		}
 
-		// Print response to the console.
-		console.log("MSA: " + msa_response);
+		// Print the response to the console.
+		console.log('MSA: ' + msa_response);
 
-		// Identify the MSA label.
-		msa_label = msa_response.query['pld_msa:msa_label'].value
-
-		// Request the venture capital amounts by cluster.
+		// Request the employment and venture capital.
 		const get_vc_id = new hbase.Get(vc_id);
-    	client.get("pld_venture_capital", get_vc_id, function(err, row) {
+    	client.get('pld_vc_wide_hbase', get_vc_id, function(err, vc_response) {
 
 			// Handle any error.
-			assert.ok(!err, "get returned an error: #{err}");
-			if(!row){
-				res.send("<html><body>The requested filings do not exist in the data.</body></html>");
+			assert.ok(!err, 'get returned an error: #{err}');
+			if (!vc_response) {
+				res.send('<html><body>The requested filings do not exist in the data.</body></html>');
 				return;
 			}
 
-			// Print response to the console.
-			console.log(row);
+			// Print the response to the console.
+			console.log('VC: ' + vc_response);
 
-			// Map results to the mustache template.
-			var template = filesystem.readFileSync('result.mustache').toString();
-			var cluster_emp_pct = (
-				row.query['pld_vc:cluster_emp'].value / row.query['pld_vc:msa_emp'].value
-			)
-			var cluster_amt_pct = (
-				row.query['pld_vc:cluster_amt'].value / row.query['pld_vc:msa_amt'].value
-			)
-			var view = {
-				'msa_label': row.cols['pld_vc:msa_label'].value,
-				'clusters': [
+			// Write a function to safely compute percentages of the data.
+			function cluster_pct(cluster, suffix) {
+				var cluster = vc_response.cols['vc:' + cluster + '_' + suffix].value
+				var msa = vc_response.cols['vc:msa_' + suffix].value
+				if (msa != 0) {
+					return (cluster / msa * 100).toFixed()
+				} else {
+					return '—'
+				}
+			}
+			
+			// Collect the results.
+			var clusters_emp_amt = []
+			for (cluster in CLUSTERS) {
+				clusters_emp_amt.push(
 					{
-						'cluster_label': row.cols['pld_vc:cluster_label'].value,
-						'cluster_emp': row.query['pld_vc:cluster_emp'].value,
-						'cluster_emp_pct': (cluster_emp_pct * 100).toFixed(),
-						'cluster_amt': req.query['pld_vc:cluster_amt'].value,
-						'cluster_amt_pct': (cluster_amt_pct * 100).toFixed()
+						cluster_label: cluster,
+						cluster_emp: vc_response.cols['vc:' + cluster + '_emp'].value,
+						cluster_emp_pct: cluster_pct(cluster, 'emp'),
+						cluster_amt: vc_response.cols['vc:' + cluster + '_amt'].value,
+						cluster_amt_pct: cluster_pct(cluster, 'amt')
 					}
-				]
-			};
-			var html = mustache.render(template, view);
+				)
+			}
+			var view = {
+				'msa_label': msa_response.cols['msa:msa_label'].value,
+				'clusters' : clusters_emp_amt
+			}
 
-			// Push the results to the web app.
+			// Map results to the mustache template and push to the web app.
+			var template = filesystem.readFileSync('result.mustache').toString();
+			var html = mustache.render(template, view);
 			res.send(html);
 		});
-	};    
+	});
 });
 
 // Standby for query.
