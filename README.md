@@ -160,7 +160,7 @@ Other hopes and dreams include:
 * a map of MSAs to identify venture capital hotspots and movement of clusters and financing over time
 * a correspondence of geographic definitions from 2010 to previous and future decennial censuses
 
-## Web app.
+## Web app
 
 The web app allows accepts and delivers requests of the serving layer. I create a simple Node.js application and launch it on the webserver.
 
