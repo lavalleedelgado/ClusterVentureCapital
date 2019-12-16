@@ -16,7 +16,7 @@ div {
     margin: auto;
     width: 60%;
     padding: 40px;
-    background-color: #FCFCFC;
+    background-color: #EFEFEF;
 }
 h1 {
     text-align: center;
@@ -30,7 +30,7 @@ iframe {
 table {
     width: 100%;
 }
-table.th {
+th {
     height: 2em;
     padding: 10px;
     border-bottom: 1px solid #DDDDDD;
@@ -38,7 +38,7 @@ table.th {
     font-size: 1em;
     font-weight: bold;
 }
-table.td {
+td {
     padding: 10px;
     border-bottom: 1px solid #DDDDDD;
     text-align: right;
