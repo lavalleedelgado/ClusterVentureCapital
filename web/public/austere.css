@@ -38,7 +38,8 @@ table {
 }
 th {
     height: 2em;
-    padding: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
     border-bottom: 1px solid #DDDDDD;
     text-align: left;
     font-size: 0.8em;
